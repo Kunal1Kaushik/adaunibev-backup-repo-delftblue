@@ -5,6 +5,8 @@ point_cloud_range = [-54.0, -54.0, -5.0, 54.0, 54.0, 3.0]
 input_modality = dict(use_lidar=True, use_camera=True)
 backend_args = None
 
+find_unused_parameters=True
+
 model = dict(
     type='BEVFusion',
     data_preprocessor=dict(
@@ -30,8 +32,9 @@ model = dict(
         convert_weights=True,
         init_cfg=dict(
             type='Pretrained',
-            checkpoint=  # noqa: E251
-            'https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth'  # noqa: E501
+            checkpoint= 
+            'https://download.openmmlab.com/mmdetection3d/v1.1.0_models/bevfusion/swint-nuimages-pretrained.pth' # noqa: E251
+            #'https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth'  # noqa: E501
         )),
     img_neck=dict(
         type='GeneralizedLSSFPN',
@@ -43,9 +46,10 @@ model = dict(
         act_cfg=dict(type='ReLU', inplace=True),
         upsample_cfg=dict(mode='bilinear', align_corners=False)),
     view_transform=dict(
-        type='DepthLSSTransform',
+        type='LSSTransform',
         in_channels=256,
-        out_channels=80,
+        #out_channels=80,
+        out_channels=256,
         image_size=[256, 704],
         feature_size=[32, 88],
         xbound=[-54.0, 54.0, 0.3],
@@ -53,8 +57,12 @@ model = dict(
         zbound=[-10.0, 10.0, 20.0],
         dbound=[1.0, 60.0, 0.5],
         downsample=2),
+    #fusion_layer=dict(
+        #type='ConvFuser', in_channels=[80, 256], out_channels=256))
+    #fusion_layer=dict(
+        #type='ConvFuser', in_channels=[256, 256], out_channels=256))
     fusion_layer=dict(
-        type='ConvFuser', in_channels=[80, 256], out_channels=256))
+        type='ConvFuser'))
 
 train_pipeline = [
     dict(
@@ -214,7 +222,7 @@ param_scheduler = [
 ]
 
 # runtime settings
-train_cfg = dict(by_epoch=True, max_epochs=6, val_interval=1)
+train_cfg = dict(by_epoch=True, max_epochs=6, val_interval=3)
 val_cfg = dict()
 test_cfg = dict()
 
@@ -233,3 +241,9 @@ default_hooks = dict(
     logger=dict(type='LoggerHook', interval=50),
     checkpoint=dict(type='CheckpointHook', interval=1))
 del _base_.custom_hooks
+
+env_cfg = dict(
+    cudnn_benchmark=False,
+    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0),
+    dist_cfg=dict(backend='gloo'),
+)

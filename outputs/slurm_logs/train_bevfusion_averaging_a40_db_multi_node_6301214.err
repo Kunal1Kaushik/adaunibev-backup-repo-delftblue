@@ -1,0 +1,144 @@
++ CONFIG=projects/BEVFusion/configs/bevfusion_lidar-cam_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py
++ WORK_DIR=./work_dirs
+++ pwd
++ echo 'Current Working Directory: /scratch/kkaushik/mmdetection3d'
+++ dirname /cm/local/apps/slurm/var/spool/job6301214/slurm_script
++ PYTHONPATH=/cm/local/apps/slurm/var/spool/job6301214/..:
++ srun python -u tools/train.py projects/BEVFusion/configs/bevfusion_lidar-cam_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py --launcher=slurm --work-dir=./work_dirs --cfg-options load_from=./lidar_pretrained/bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d-2628f933.pth model.img_backbone.init_cfg.checkpoint=./swin-pretrained/swint-nuimages-pretrained.pth
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
+Traceback (most recent call last):
+  File "tools/train.py", line 145, in <module>
+Traceback (most recent call last):
+  File "tools/train.py", line 145, in <module>
+Traceback (most recent call last):
+  File "tools/train.py", line 145, in <module>
+    main()
+  File "tools/train.py", line 134, in main
+    main()
+  File "tools/train.py", line 134, in main
+    main()
+  File "tools/train.py", line 134, in main
+    runner = Runner.from_cfg(cfg)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 462, in from_cfg
+    runner = Runner.from_cfg(cfg)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 462, in from_cfg
+    runner = Runner.from_cfg(cfg)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 462, in from_cfg
+    runner = cls(
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 372, in __init__
+    runner = cls(
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 372, in __init__
+    runner = cls(
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 372, in __init__
+    self.setup_env(env_cfg)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 675, in setup_env
+    self.setup_env(env_cfg)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 675, in setup_env
+    self.setup_env(env_cfg)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 675, in setup_env
+    init_dist(self.launcher, **dist_cfg)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/dist/utils.py", line 89, in init_dist
+    init_dist(self.launcher, **dist_cfg)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/dist/utils.py", line 89, in init_dist
+    init_dist(self.launcher, **dist_cfg)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/dist/utils.py", line 89, in init_dist
+    _init_dist_slurm(backend, init_backend=init_backend, **kwargs)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/dist/utils.py", line 221, in _init_dist_slurm
+    _init_dist_slurm(backend, init_backend=init_backend, **kwargs)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/dist/utils.py", line 221, in _init_dist_slurm
+    _init_dist_slurm(backend, init_backend=init_backend, **kwargs)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/dist/utils.py", line 221, in _init_dist_slurm
+    torch.cuda.set_device(local_rank)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/torch/cuda/__init__.py", line 420, in set_device
+    torch.cuda.set_device(local_rank)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/torch/cuda/__init__.py", line 420, in set_device
+    torch.cuda.set_device(local_rank)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/torch/cuda/__init__.py", line 420, in set_device
+    torch._C._cuda_setDevice(device)
+RuntimeError: CUDA error: invalid device ordinal
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+    torch._C._cuda_setDevice(device)
+RuntimeError: CUDA error: invalid device ordinal
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+    torch._C._cuda_setDevice(device)
+RuntimeError: CUDA error: invalid device ordinal
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+srun: error: gpu019: tasks 1-3: Exited with exit code 1
+srun: launch/slurm: _step_signal: Terminating StepId=6301214.0
+slurmstepd: error: *** STEP 6301214.0 ON gpu019 CANCELLED AT 2025-03-28T14:34:04 ***
+srun: error: gpu019: task 0: Terminated
+srun: Force Terminated StepId=6301214.0
++ conda deactivate
++ local cmd=deactivate
++ case "$cmd" in
++ __conda_activate deactivate
++ '[' -n '' ']'
++ local ask_conda
+++ PS1='(openmmlab) '
+++ __conda_exe shell.posix deactivate
+++ __add_sys_prefix_to_path
+++ '[' -n '' ']'
++++ dirname /apps/generic/miniconda3/4.12.0/bin/conda
+++ SYSP=/apps/generic/miniconda3/4.12.0/bin
++++ dirname /apps/generic/miniconda3/4.12.0/bin
+++ SYSP=/apps/generic/miniconda3/4.12.0
+++ '[' -n '' ']'
+++ PATH=/apps/generic/miniconda3/4.12.0/bin:/home/kkaushik/.conda/envs/openmmlab/bin:/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ export PATH
+++ /apps/generic/miniconda3/4.12.0/bin/conda shell.posix deactivate
++ ask_conda='export PATH='\''/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin'\''
+unset CONDA_PREFIX
+unset CONDA_DEFAULT_ENV
+unset CONDA_PROMPT_MODIFIER
+PS1='\'''\''
+export CONDA_SHLVL='\''0'\''
+export CONDA_EXE='\''/apps/generic/miniconda3/4.12.0/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/apps/generic/miniconda3/4.12.0/bin/python'\'''
++ eval 'export PATH='\''/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin'\''
+unset CONDA_PREFIX
+unset CONDA_DEFAULT_ENV
+unset CONDA_PROMPT_MODIFIER
+PS1='\'''\''
+export CONDA_SHLVL='\''0'\''
+export CONDA_EXE='\''/apps/generic/miniconda3/4.12.0/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/apps/generic/miniconda3/4.12.0/bin/python'\'''
+++ export PATH=/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ PATH=/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ unset CONDA_PREFIX
+++ unset CONDA_DEFAULT_ENV
+++ unset CONDA_PROMPT_MODIFIER
+++ PS1=
+++ export CONDA_SHLVL=0
+++ CONDA_SHLVL=0
+++ export CONDA_EXE=/apps/generic/miniconda3/4.12.0/bin/conda
+++ CONDA_EXE=/apps/generic/miniconda3/4.12.0/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/apps/generic/miniconda3/4.12.0/bin/python
+++ CONDA_PYTHON_EXE=/apps/generic/miniconda3/4.12.0/bin/python
++ __conda_hashr
++ '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r

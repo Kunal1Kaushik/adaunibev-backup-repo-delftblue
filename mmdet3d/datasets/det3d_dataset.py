@@ -6,7 +6,8 @@ from typing import Callable, List, Optional, Set, Union
 
 import numpy as np
 import torch
-from mmengine.dataset import BaseDataset
+#from mmengine.dataset import BaseDataset
+from .base_dataset import BaseDataset
 from mmengine.logging import print_log
 from terminaltables import AsciiTable
 

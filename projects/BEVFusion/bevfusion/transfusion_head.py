@@ -25,7 +25,7 @@ def clip_sigmoid(x, eps=1e-4):
     return y
 
 
-@MODELS.register_module()
+'''@MODELS.register_module()
 class ConvFuser(nn.Sequential):
 
     def __init__(self, in_channels: int, out_channels: int) -> None:
@@ -39,7 +39,29 @@ class ConvFuser(nn.Sequential):
         )
 
     def forward(self, inputs: List[torch.Tensor]) -> torch.Tensor:
-        return super().forward(torch.cat(inputs, dim=1))
+        return super().forward(torch.cat(inputs, dim=1))'''
+
+@MODELS.register_module()
+class ConvFuser(nn.Module):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def forward(self, inputs: List[torch.Tensor]) -> torch.Tensor:
+        # Check if any input is all zeros
+        is_zero = [torch.all(inp == 0) for inp in inputs]
+
+        if sum(is_zero) == 1:
+            # One modality is zeroed (dropped), do weighted sum with weights 1 and 0
+            if is_zero[0]:
+                # inputs[0] is zero, so 1*inputs[1] + 0*inputs[0]
+                return 1.0 * inputs[1] + 0.0 * inputs[0]
+            else:
+                # inputs[1] is zero, so 1*inputs[0] + 0*inputs[1]
+                return 1.0 * inputs[0] + 0.0 * inputs[1]
+        else:
+            # Both modalities active, do average fusion
+            return torch.mean(torch.stack(inputs, dim=0), dim=0)
+
 
 
 @MODELS.register_module()

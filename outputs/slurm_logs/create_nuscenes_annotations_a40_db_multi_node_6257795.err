@@ -1,0 +1,65 @@
+++ dirname /cm/local/apps/slurm/var/spool/job6257795/slurm_script
++ PYTHONPATH=/cm/local/apps/slurm/var/spool/job6257795/..:
++ srun python -u tools/create_data.py nuscenes --root-path ./data/nuscenes --out-dir ./data/nuscenes --extra-tag nuscenes
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
++ conda deactivate
++ local cmd=deactivate
++ case "$cmd" in
++ __conda_activate deactivate
++ '[' -n '' ']'
++ local ask_conda
+++ PS1='(openmmlab) '
+++ __conda_exe shell.posix deactivate
+++ __add_sys_prefix_to_path
+++ '[' -n '' ']'
++++ dirname /apps/generic/miniconda3/4.12.0/bin/conda
+++ SYSP=/apps/generic/miniconda3/4.12.0/bin
++++ dirname /apps/generic/miniconda3/4.12.0/bin
+++ SYSP=/apps/generic/miniconda3/4.12.0
+++ '[' -n '' ']'
+++ PATH=/apps/generic/miniconda3/4.12.0/bin:/home/kkaushik/.conda/envs/openmmlab/bin:/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ export PATH
+++ /apps/generic/miniconda3/4.12.0/bin/conda shell.posix deactivate
++ ask_conda='export PATH='\''/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin'\''
+unset CONDA_PREFIX
+unset CONDA_DEFAULT_ENV
+unset CONDA_PROMPT_MODIFIER
+PS1='\'''\''
+export CONDA_SHLVL='\''0'\''
+export CONDA_EXE='\''/apps/generic/miniconda3/4.12.0/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/apps/generic/miniconda3/4.12.0/bin/python'\'''
++ eval 'export PATH='\''/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin'\''
+unset CONDA_PREFIX
+unset CONDA_DEFAULT_ENV
+unset CONDA_PROMPT_MODIFIER
+PS1='\'''\''
+export CONDA_SHLVL='\''0'\''
+export CONDA_EXE='\''/apps/generic/miniconda3/4.12.0/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/apps/generic/miniconda3/4.12.0/bin/python'\'''
+++ export PATH=/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ PATH=/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ unset CONDA_PREFIX
+++ unset CONDA_DEFAULT_ENV
+++ unset CONDA_PROMPT_MODIFIER
+++ PS1=
+++ export CONDA_SHLVL=0
+++ CONDA_SHLVL=0
+++ export CONDA_EXE=/apps/generic/miniconda3/4.12.0/bin/conda
+++ CONDA_EXE=/apps/generic/miniconda3/4.12.0/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/apps/generic/miniconda3/4.12.0/bin/python
+++ CONDA_PYTHON_EXE=/apps/generic/miniconda3/4.12.0/bin/python
++ __conda_hashr
++ '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r

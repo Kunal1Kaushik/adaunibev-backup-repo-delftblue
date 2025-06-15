@@ -4,7 +4,9 @@ import warnings
 from typing import List, Set, Union
 
 import numpy as np
-from mmengine.dataset import BaseDataset, force_full_init
+#from mmengine.dataset import BaseDataset, force_full_init
+#from mmengine.dataset force_full_init
+from .base_dataset import BaseDataset, force_full_init
 
 from mmdet3d.registry import DATASETS
 

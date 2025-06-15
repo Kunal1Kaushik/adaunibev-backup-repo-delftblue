@@ -1,0 +1,101 @@
++ CONFIG=projects/BEVFusion/configs/bevfusion_lidar-cam_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py
++ WORK_DIR=./work_dirs
+++ pwd
++ echo 'Current Working Directory: /scratch/kkaushik/mmdetection3d'
+++ dirname /cm/local/apps/slurm/var/spool/job6829426/slurm_script
++ PYTHONPATH=/cm/local/apps/slurm/var/spool/job6829426/..:
++ srun python -u tools/train.py projects/BEVFusion/configs/bevfusion_lidar-cam_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py --launcher=slurm --work-dir=./work_dirs --cfg-options load_from=./lidar_pretrained/bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d-2628f933.pth model.img_backbone.init_cfg.checkpoint=./swin-pretrained/swint-nuimages-pretrained.pth
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmdet/models/task_modules/builder.py:17: UserWarning: ``build_sampler`` would be deprecated soon, please use ``mmdet.registry.TASK_UTILS.build()`` 
+  warnings.warn('``build_sampler`` would be deprecated soon, please use '
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmdet/models/task_modules/builder.py:39: UserWarning: ``build_assigner`` would be deprecated soon, please use ``mmdet.registry.TASK_UTILS.build()`` 
+  warnings.warn('``build_assigner`` would be deprecated soon, please use '
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/torch/functional.py:513: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3609.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/checkpoint.py:347: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(filename, map_location=map_location)
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmdet/models/task_modules/builder.py:17: UserWarning: ``build_sampler`` would be deprecated soon, please use ``mmdet.registry.TASK_UTILS.build()`` 
+  warnings.warn('``build_sampler`` would be deprecated soon, please use '
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmdet/models/task_modules/builder.py:39: UserWarning: ``build_assigner`` would be deprecated soon, please use ``mmdet.registry.TASK_UTILS.build()`` 
+  warnings.warn('``build_assigner`` would be deprecated soon, please use '
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/torch/functional.py:513: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3609.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/checkpoint.py:347: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(filename, map_location=map_location)
+/scratch/kkaushik/mmdetection3d/mmdet3d/evaluation/functional/kitti_utils/eval.py:10: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def get_thresholds(scores: np.ndarray, num_gt, num_sample_pts=41):
+/scratch/kkaushik/mmdetection3d/mmdet3d/evaluation/functional/kitti_utils/eval.py:10: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  def get_thresholds(scores: np.ndarray, num_gt, num_sample_pts=41):
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/checkpoint.py:347: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(filename, map_location=map_location)
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/checkpoint.py:347: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(filename, map_location=map_location)
+[rank0]:[W512 18:38:36.416126114 reducer.cpp:1400] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[rank1]:[W512 18:38:36.604509051 reducer.cpp:1400] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/utils.py:120: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.post_center_range = torch.tensor(
+/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/utils.py:120: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.post_center_range = torch.tensor(
+  0%|          | 0/6019 [00:00<?, ?it/s]  4%|▍         | 251/6019 [00:00<00:02, 2507.62it/s]  8%|▊         | 502/6019 [00:00<00:03, 1460.43it/s] 11%|█         | 672/6019 [00:00<00:03, 1374.42it/s] 14%|█▎        | 822/6019 [00:00<00:04, 1272.79it/s] 16%|█▌        | 956/6019 [00:00<00:04, 1113.21it/s] 18%|█▊        | 1072/6019 [00:00<00:05, 909.61it/s] 20%|█▉        | 1174/6019 [00:01<00:05, 932.13it/s] 22%|██▏       | 1342/6019 [00:01<00:04, 1114.35it/s] 25%|██▌       | 1525/6019 [00:01<00:03, 1292.36it/s] 28%|██▊       | 1664/6019 [00:01<00:04, 1051.80it/s] 30%|██▉       | 1805/6019 [00:01<00:03, 1133.01it/s] 32%|███▏      | 1930/6019 [00:01<00:04, 973.98it/s]  34%|███▍      | 2052/6019 [00:01<00:03, 1029.95it/s] 36%|███▌      | 2165/6019 [00:01<00:03, 1001.31it/s] 38%|███▊      | 2275/6019 [00:02<00:03, 1023.96it/s] 40%|███▉      | 2383/6019 [00:02<00:03, 966.40it/s]  42%|████▏     | 2553/6019 [00:02<00:02, 1155.35it/s] 44%|████▍     | 2674/6019 [00:02<00:03, 1112.92it/s] 46%|████▋     | 2790/6019 [00:02<00:03, 1070.80it/s] 49%|████▊     | 2926/6019 [00:02<00:02, 1147.82it/s] 51%|█████▏    | 3085/6019 [00:02<00:02, 1269.86it/s] 53%|█████▎    | 3216/6019 [00:02<00:02, 1213.05it/s] 56%|█████▌    | 3353/6019 [00:02<00:02, 1256.07it/s] 58%|█████▊    | 3519/6019 [00:03<00:01, 1368.41it/s] 61%|██████    | 3658/6019 [00:03<00:01, 1368.78it/s] 63%|██████▎   | 3810/6019 [00:03<00:01, 1412.20it/s] 67%|██████▋   | 4034/6019 [00:03<00:01, 1651.45it/s] 70%|██████▉   | 4201/6019 [00:03<00:01, 1599.72it/s] 72%|███████▏  | 4363/6019 [00:03<00:01, 1491.02it/s] 75%|███████▌  | 4515/6019 [00:03<00:01, 1254.78it/s] 81%|████████  | 4887/6019 [00:03<00:00, 1867.91it/s] 85%|████████▍ | 5092/6019 [00:03<00:00, 1877.92it/s] 88%|████████▊ | 5293/6019 [00:04<00:00, 1688.88it/s] 91%|█████████ | 5474/6019 [00:04<00:00, 1653.36it/s]100%|█████████▉| 6018/6019 [00:04<00:00, 2629.68it/s]                                                     /scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/utils.py:120: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.post_center_range = torch.tensor(
+  0%|          | 0/6019 [00:00<?, ?it/s]  4%|▍         | 254/6019 [00:00<00:02, 2512.32it/s]  8%|▊         | 506/6019 [00:00<00:03, 1505.28it/s] 11%|█▏        | 679/6019 [00:00<00:03, 1395.47it/s] 14%|█▍        | 830/6019 [00:00<00:04, 1286.35it/s] 16%|█▌        | 965/6019 [00:00<00:04, 1142.73it/s] 18%|█▊        | 1084/6019 [00:00<00:05, 932.86it/s] 20%|█▉        | 1184/6019 [00:01<00:05, 947.94it/s] 23%|██▎       | 1365/6019 [00:01<00:04, 1159.43it/s] 25%|██▌       | 1532/6019 [00:01<00:03, 1290.86it/s] 28%|██▊       | 1671/6019 [00:01<00:04, 1077.50it/s] 30%|███       | 1809/6019 [00:01<00:03, 1147.28it/s] 32%|███▏      | 1934/6019 [00:01<00:04, 979.37it/s]  34%|███▍      | 2058/6019 [00:01<00:03, 1039.22it/s] 36%|███▌      | 2171/6019 [00:01<00:03, 1006.10it/s] 38%|███▊      | 2284/6019 [00:02<00:03, 1035.76it/s] 40%|███▉      | 2393/6019 [00:02<00:03, 992.68it/s]  43%|████▎     | 2569/6019 [00:02<00:02, 1194.62it/s] 45%|████▍     | 2694/6019 [00:02<00:02, 1127.62it/s] 47%|████▋     | 2811/6019 [00:02<00:02, 1127.94it/s] 49%|████▉     | 2936/6019 [00:02<00:02, 1160.83it/s] 51%|█████▏    | 3096/6019 [00:02<00:02, 1281.67it/s] 54%|█████▎    | 3227/6019 [00:02<00:02, 1258.22it/s] 56%|█████▌    | 3367/6019 [00:02<00:02, 1296.29it/s] 59%|█████▊    | 3533/6019 [00:02<00:01, 1399.74it/s] 61%|██████    | 3675/6019 [00:03<00:01, 1393.25it/s] 64%|██████▍   | 3860/6019 [00:03<00:01, 1525.49it/s] 67%|██████▋   | 4049/6019 [00:03<00:01, 1628.64it/s] 70%|██████▉   | 4213/6019 [00:03<00:01, 1601.80it/s] 73%|███████▎  | 4374/6019 [00:03<00:01, 1465.04it/s] 75%|███████▌  | 4524/6019 [00:03<00:01, 1245.40it/s] 82%|████████▏ | 4915/6019 [00:03<00:00, 1909.90it/s] 85%|████████▌ | 5124/6019 [00:03<00:00, 1923.34it/s] 89%|████████▊ | 5329/6019 [00:04<00:00, 1616.74it/s] 94%|█████████▍| 5647/6019 [00:04<00:00, 1993.37it/s]                                                     + conda deactivate
++ local cmd=deactivate
++ case "$cmd" in
++ __conda_activate deactivate
++ '[' -n '' ']'
++ local ask_conda
+++ PS1='(openmmlab) '
+++ __conda_exe shell.posix deactivate
+++ __add_sys_prefix_to_path
+++ '[' -n '' ']'
++++ dirname /apps/generic/miniconda3/4.12.0/bin/conda
+++ SYSP=/apps/generic/miniconda3/4.12.0/bin
++++ dirname /apps/generic/miniconda3/4.12.0/bin
+++ SYSP=/apps/generic/miniconda3/4.12.0
+++ '[' -n '' ']'
+++ PATH=/apps/generic/miniconda3/4.12.0/bin:/home/kkaushik/.conda/envs/openmmlab/bin:/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ export PATH
+++ /apps/generic/miniconda3/4.12.0/bin/conda shell.posix deactivate
++ ask_conda='export PATH='\''/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin'\''
+unset CONDA_PREFIX
+unset CONDA_DEFAULT_ENV
+unset CONDA_PROMPT_MODIFIER
+PS1='\'''\''
+export CONDA_SHLVL='\''0'\''
+export CONDA_EXE='\''/apps/generic/miniconda3/4.12.0/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/apps/generic/miniconda3/4.12.0/bin/python'\'''
++ eval 'export PATH='\''/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin'\''
+unset CONDA_PREFIX
+unset CONDA_DEFAULT_ENV
+unset CONDA_PROMPT_MODIFIER
+PS1='\'''\''
+export CONDA_SHLVL='\''0'\''
+export CONDA_EXE='\''/apps/generic/miniconda3/4.12.0/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/apps/generic/miniconda3/4.12.0/bin/python'\'''
+++ export PATH=/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ PATH=/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ unset CONDA_PREFIX
+++ unset CONDA_DEFAULT_ENV
+++ unset CONDA_PROMPT_MODIFIER
+++ PS1=
+++ export CONDA_SHLVL=0
+++ CONDA_SHLVL=0
+++ export CONDA_EXE=/apps/generic/miniconda3/4.12.0/bin/conda
+++ CONDA_EXE=/apps/generic/miniconda3/4.12.0/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/apps/generic/miniconda3/4.12.0/bin/python
+++ CONDA_PYTHON_EXE=/apps/generic/miniconda3/4.12.0/bin/python
++ __conda_hashr
++ '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r

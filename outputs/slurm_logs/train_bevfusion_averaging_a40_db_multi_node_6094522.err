@@ -1,0 +1,174 @@
++ CONFIG=projects/BEVFusion/configs/bevfusion_lidar-cam_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py
++ WORK_DIR=.
+++ pwd
++ echo 'Current Working Directory: /scratch/kkaushik/mmdetection3d'
+++ dirname /cm/local/apps/slurm/var/spool/job6094522/slurm_script
++ PYTHONPATH=/cm/local/apps/slurm/var/spool/job6094522/..:
++ srun python -u tools/train.py projects/BEVFusion/configs/bevfusion_lidar-cam_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py --launcher=slurm --work-dir=. --cfg-options load_from=./lidar_pretrained/bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d-2628f933.pth model.img_backbone.init_cfg.checkpoint=./swin-pretrained/swint-nuimages-pretrained.pth
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
+Traceback (most recent call last):
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/utils/misc.py", line 77, in import_modules_from_strings
+Traceback (most recent call last):
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/utils/misc.py", line 77, in import_modules_from_strings
+    imported_tmp = import_module(imp)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/importlib/__init__.py", line 127, in import_module
+    imported_tmp = import_module(imp)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 843, in exec_module
+  File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap_external>", line 843, in exec_module
+  File "/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/__init__.py", line 1, in <module>
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/__init__.py", line 1, in <module>
+    from .bevfusion import BEVFusion
+  File "/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/bevfusion.py", line 16, in <module>
+    from .bevfusion import BEVFusion
+  File "/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/bevfusion.py", line 16, in <module>
+    from .ops import Voxelization
+  File "/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/ops/__init__.py", line 1, in <module>
+    from .ops import Voxelization
+  File "/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/ops/__init__.py", line 1, in <module>
+    from .bev_pool import bev_pool
+  File "/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/ops/bev_pool/__init__.py", line 1, in <module>
+    from .bev_pool import bev_pool
+  File "/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/ops/bev_pool/__init__.py", line 1, in <module>
+    from .bev_pool import bev_pool
+  File "/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/ops/bev_pool/bev_pool.py", line 3, in <module>
+    from .bev_pool import bev_pool
+  File "/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/ops/bev_pool/bev_pool.py", line 3, in <module>
+    from . import bev_pool_ext
+ImportError: cannot import name 'bev_pool_ext' from partially initialized module 'projects.BEVFusion.bevfusion.ops.bev_pool' (most likely due to a circular import) (/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/ops/bev_pool/__init__.py)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/config/config.py", line 466, in fromfile
+    from . import bev_pool_ext
+ImportError: cannot import name 'bev_pool_ext' from partially initialized module 'projects.BEVFusion.bevfusion.ops.bev_pool' (most likely due to a circular import) (/scratch/kkaushik/mmdetection3d/projects/BEVFusion/bevfusion/ops/bev_pool/__init__.py)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/config/config.py", line 466, in fromfile
+    import_modules_from_strings(**cfg_dict['custom_imports'])
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/utils/misc.py", line 84, in import_modules_from_strings
+    raise ImportError(f'Failed to import {imp}')
+    import_modules_from_strings(**cfg_dict['custom_imports'])
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/utils/misc.py", line 84, in import_modules_from_strings
+ImportError: Failed to import projects.BEVFusion.bevfusion
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "tools/train.py", line 145, in <module>
+    raise ImportError(f'Failed to import {imp}')
+ImportError: Failed to import projects.BEVFusion.bevfusion
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+    main()
+  File "tools/train.py", line 73, in main
+  File "tools/train.py", line 145, in <module>
+    cfg = Config.fromfile(args.config)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/config/config.py", line 478, in fromfile
+    main()
+  File "tools/train.py", line 73, in main
+    raise ImportError(err_msg) from e
+    cfg = Config.fromfile(args.config)
+  File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/config/config.py", line 478, in fromfile
+ImportError: Failed to import custom modules from {'imports': ['projects.BEVFusion.bevfusion'], 'allow_failed_imports': False}, the current sys.path is: 
+    /scratch/kkaushik/mmdetection3d/tools
+    /cm/local/apps/slurm/var/spool
+    /scratch/kkaushik/mmdetection3d
+    /home/kkaushik/.conda/envs/openmmlab/lib/python38.zip
+    /home/kkaushik/.conda/envs/openmmlab/lib/python3.8
+    /home/kkaushik/.conda/envs/openmmlab/lib/python3.8/lib-dynload
+    /home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages
+    /tmp/tmpsgakfvud
+You should set `PYTHONPATH` to make `sys.path` include the directory which contains your custom module
+    raise ImportError(err_msg) from e
+ImportError: Failed to import custom modules from {'imports': ['projects.BEVFusion.bevfusion'], 'allow_failed_imports': False}, the current sys.path is: 
+    /scratch/kkaushik/mmdetection3d/tools
+    /cm/local/apps/slurm/var/spool
+    /scratch/kkaushik/mmdetection3d
+    /home/kkaushik/.conda/envs/openmmlab/lib/python38.zip
+    /home/kkaushik/.conda/envs/openmmlab/lib/python3.8
+    /home/kkaushik/.conda/envs/openmmlab/lib/python3.8/lib-dynload
+    /home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages
+    /tmp/tmpkgy1hjb7
+You should set `PYTHONPATH` to make `sys.path` include the directory which contains your custom module
+srun: error: gpu012: task 0: Exited with exit code 1
+srun: launch/slurm: _step_signal: Terminating StepId=6094522.0
+srun: error: gpu014: task 1: Exited with exit code 1
++ conda deactivate
++ local cmd=deactivate
++ case "$cmd" in
++ __conda_activate deactivate
++ '[' -n '' ']'
++ local ask_conda
+++ PS1='(openmmlab) '
+++ __conda_exe shell.posix deactivate
+++ __add_sys_prefix_to_path
+++ '[' -n '' ']'
++++ dirname /apps/generic/miniconda3/4.12.0/bin/conda
+++ SYSP=/apps/generic/miniconda3/4.12.0/bin
++++ dirname /apps/generic/miniconda3/4.12.0/bin
+++ SYSP=/apps/generic/miniconda3/4.12.0
+++ '[' -n '' ']'
+++ PATH=/apps/generic/miniconda3/4.12.0/bin:/home/kkaushik/.conda/envs/openmmlab/bin:/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ export PATH
+++ /apps/generic/miniconda3/4.12.0/bin/conda shell.posix deactivate
++ ask_conda='export PATH='\''/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin'\''
+unset CONDA_PREFIX
+unset CONDA_DEFAULT_ENV
+unset CONDA_PROMPT_MODIFIER
+PS1='\'''\''
+export CONDA_SHLVL='\''0'\''
+export CONDA_EXE='\''/apps/generic/miniconda3/4.12.0/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/apps/generic/miniconda3/4.12.0/bin/python'\'''
++ eval 'export PATH='\''/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin'\''
+unset CONDA_PREFIX
+unset CONDA_DEFAULT_ENV
+unset CONDA_PROMPT_MODIFIER
+PS1='\'''\''
+export CONDA_SHLVL='\''0'\''
+export CONDA_EXE='\''/apps/generic/miniconda3/4.12.0/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/apps/generic/miniconda3/4.12.0/bin/python'\'''
+++ export PATH=/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ PATH=/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ unset CONDA_PREFIX
+++ unset CONDA_DEFAULT_ENV
+++ unset CONDA_PROMPT_MODIFIER
+++ PS1=
+++ export CONDA_SHLVL=0
+++ CONDA_SHLVL=0
+++ export CONDA_EXE=/apps/generic/miniconda3/4.12.0/bin/conda
+++ CONDA_EXE=/apps/generic/miniconda3/4.12.0/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/apps/generic/miniconda3/4.12.0/bin/python
+++ CONDA_PYTHON_EXE=/apps/generic/miniconda3/4.12.0/bin/python
++ __conda_hashr
++ '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r

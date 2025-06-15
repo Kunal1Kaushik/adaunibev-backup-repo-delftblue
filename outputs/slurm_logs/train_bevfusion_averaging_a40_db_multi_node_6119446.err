@@ -1,0 +1,160 @@
++ CONFIG=projects/BEVFusion/configs/bevfusion_lidar-cam_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py
++ WORK_DIR=./work_dirs
+++ pwd
++ echo 'Current Working Directory: /scratch/kkaushik/mmdetection3d'
+++ dirname /cm/local/apps/slurm/var/spool/job6119446/slurm_script
++ PYTHONPATH=/cm/local/apps/slurm/var/spool/job6119446/..:
++ srun python -u tools/train.py projects/BEVFusion/configs/bevfusion_lidar-cam_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py --launcher=slurm --work-dir=./work_dirs --cfg-options load_from=./lidar_pretrained/bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d-2628f933.pth model.img_backbone.init_cfg.checkpoint=./swin-pretrained/swint-nuimages-pretrained.pth
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/optim/optimizer/zero_optimizer.py:11: DeprecationWarning: `TorchScript` support for functional optimizers is deprecated and will be removed in a future PyTorch release. Consider using the `torch.compile` optimizer instead.
+  from torch.distributed.optim import \
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmdet/models/task_modules/builder.py:17: UserWarning: ``build_sampler`` would be deprecated soon, please use ``mmdet.registry.TASK_UTILS.build()`` 
+  warnings.warn('``build_sampler`` would be deprecated soon, please use '
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmdet/models/task_modules/builder.py:39: UserWarning: ``build_assigner`` would be deprecated soon, please use ``mmdet.registry.TASK_UTILS.build()`` 
+  warnings.warn('``build_assigner`` would be deprecated soon, please use '
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/torch/functional.py:513: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3609.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/checkpoint.py:347: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(filename, map_location=map_location)
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmdet/models/task_modules/builder.py:17: UserWarning: ``build_sampler`` would be deprecated soon, please use ``mmdet.registry.TASK_UTILS.build()`` 
+  warnings.warn('``build_sampler`` would be deprecated soon, please use '
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmdet/models/task_modules/builder.py:39: UserWarning: ``build_assigner`` would be deprecated soon, please use ``mmdet.registry.TASK_UTILS.build()`` 
+  warnings.warn('``build_assigner`` would be deprecated soon, please use '
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/torch/functional.py:513: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3609.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/checkpoint.py:347: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(filename, map_location=map_location)
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "tools/train.py", line 145, in <module>
+[rank1]:     main()
+[rank1]:   File "tools/train.py", line 141, in main
+[rank1]:     runner.train()
+[rank1]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 1728, in train
+[rank1]:     self._train_loop = self.build_train_loop(
+[rank1]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 1527, in build_train_loop
+[rank1]:     loop = EpochBasedTrainLoop(
+[rank1]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/loops.py", line 46, in __init__
+[rank1]:     super().__init__(runner, dataloader)
+[rank1]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/base_loop.py", line 26, in __init__
+[rank1]:     self.dataloader = runner.build_dataloader(
+[rank1]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 1370, in build_dataloader
+[rank1]:     dataset = DATASETS.build(dataset_cfg)
+[rank1]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/registry/registry.py", line 570, in build
+[rank1]:     return self.build_func(cfg, *args, **kwargs, registry=self)
+[rank1]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/registry/build_functions.py", line 121, in build_from_cfg
+[rank1]:     obj = obj_cls(**args)  # type: ignore
+[rank1]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/dataset_wrappers.py", line 33, in __init__
+[rank1]:     self.dataset = DATASETS.build(dataset)
+[rank1]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/registry/registry.py", line 570, in build
+[rank1]:     return self.build_func(cfg, *args, **kwargs, registry=self)
+[rank1]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/registry/build_functions.py", line 121, in build_from_cfg
+[rank1]:     obj = obj_cls(**args)  # type: ignore
+[rank1]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/nuscenes_dataset.py", line 102, in __init__
+[rank1]:     super().__init__(
+[rank1]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/det3d_dataset.py", line 127, in __init__
+[rank1]:     super().__init__(
+[rank1]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/base_dataset.py", line 252, in __init__
+[rank1]:     self.full_init()
+[rank1]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/base_dataset.py", line 303, in full_init
+[rank1]:     self.data_list = self.load_data_list()
+[rank1]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/base_dataset.py", line 450, in load_data_list
+[rank1]:     raise ValueError('Annotation must have data_list and metainfo '
+[rank1]: ValueError: Annotation must have data_list and metainfo keys
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "tools/train.py", line 145, in <module>
+[rank0]:     main()
+[rank0]:   File "tools/train.py", line 141, in main
+[rank0]:     runner.train()
+[rank0]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 1728, in train
+[rank0]:     self._train_loop = self.build_train_loop(
+[rank0]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 1527, in build_train_loop
+[rank0]:     loop = EpochBasedTrainLoop(
+[rank0]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/loops.py", line 46, in __init__
+[rank0]:     super().__init__(runner, dataloader)
+[rank0]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/base_loop.py", line 26, in __init__
+[rank0]:     self.dataloader = runner.build_dataloader(
+[rank0]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/runner/runner.py", line 1370, in build_dataloader
+[rank0]:     dataset = DATASETS.build(dataset_cfg)
+[rank0]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/registry/registry.py", line 570, in build
+[rank0]:     return self.build_func(cfg, *args, **kwargs, registry=self)
+[rank0]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/registry/build_functions.py", line 121, in build_from_cfg
+[rank0]:     obj = obj_cls(**args)  # type: ignore
+[rank0]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/dataset_wrappers.py", line 33, in __init__
+[rank0]:     self.dataset = DATASETS.build(dataset)
+[rank0]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/registry/registry.py", line 570, in build
+[rank0]:     return self.build_func(cfg, *args, **kwargs, registry=self)
+[rank0]:   File "/home/kkaushik/.conda/envs/openmmlab/lib/python3.8/site-packages/mmengine/registry/build_functions.py", line 121, in build_from_cfg
+[rank0]:     obj = obj_cls(**args)  # type: ignore
+[rank0]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/nuscenes_dataset.py", line 102, in __init__
+[rank0]:     super().__init__(
+[rank0]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/det3d_dataset.py", line 127, in __init__
+[rank0]:     super().__init__(
+[rank0]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/base_dataset.py", line 252, in __init__
+[rank0]:     self.full_init()
+[rank0]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/base_dataset.py", line 303, in full_init
+[rank0]:     self.data_list = self.load_data_list()
+[rank0]:   File "/scratch/kkaushik/mmdetection3d/mmdet3d/datasets/base_dataset.py", line 450, in load_data_list
+[rank0]:     raise ValueError('Annotation must have data_list and metainfo '
+[rank0]: ValueError: Annotation must have data_list and metainfo keys
+srun: error: gpu015: task 0: Exited with exit code 1
+srun: launch/slurm: _step_signal: Terminating StepId=6119446.0
+srun: error: gpu016: task 1: Exited with exit code 1
++ conda deactivate
++ local cmd=deactivate
++ case "$cmd" in
++ __conda_activate deactivate
++ '[' -n '' ']'
++ local ask_conda
+++ PS1='(openmmlab) '
+++ __conda_exe shell.posix deactivate
+++ __add_sys_prefix_to_path
+++ '[' -n '' ']'
++++ dirname /apps/generic/miniconda3/4.12.0/bin/conda
+++ SYSP=/apps/generic/miniconda3/4.12.0/bin
++++ dirname /apps/generic/miniconda3/4.12.0/bin
+++ SYSP=/apps/generic/miniconda3/4.12.0
+++ '[' -n '' ']'
+++ PATH=/apps/generic/miniconda3/4.12.0/bin:/home/kkaushik/.conda/envs/openmmlab/bin:/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ export PATH
+++ /apps/generic/miniconda3/4.12.0/bin/conda shell.posix deactivate
++ ask_conda='export PATH='\''/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin'\''
+unset CONDA_PREFIX
+unset CONDA_DEFAULT_ENV
+unset CONDA_PROMPT_MODIFIER
+PS1='\'''\''
+export CONDA_SHLVL='\''0'\''
+export CONDA_EXE='\''/apps/generic/miniconda3/4.12.0/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/apps/generic/miniconda3/4.12.0/bin/python'\'''
++ eval 'export PATH='\''/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin'\''
+unset CONDA_PREFIX
+unset CONDA_DEFAULT_ENV
+unset CONDA_PROMPT_MODIFIER
+PS1='\'''\''
+export CONDA_SHLVL='\''0'\''
+export CONDA_EXE='\''/apps/generic/miniconda3/4.12.0/bin/conda'\''
+export _CE_M='\'''\''
+export _CE_CONDA='\'''\''
+export CONDA_PYTHON_EXE='\''/apps/generic/miniconda3/4.12.0/bin/python'\'''
+++ export PATH=/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ PATH=/apps/generic/miniconda3/4.12.0/condabin:/apps/generic/miniconda3/4.12.0/condabin:/beegfs/apps/generic/cuda-12.5/bin:/apps/arch/2024r1/software/linux-rhel8-x86_64_v3/gcc-11.3.0/openmpi-4.1.6-h2uag4kpbem3g5bhzwkor27x7o5tf6w7/bin:/apps/generic/compiler-2024/software/linux-rhel8-x86_64_v3/gcc-8.5.0/gcc-11.3.0-ifl4t3krdzkcrmejbgj5reljeokuv3vs/bin:/home/kkaushik/.local/bin:/home/kkaushik/bin:/cm/shared/apps/slurm/current/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ unset CONDA_PREFIX
+++ unset CONDA_DEFAULT_ENV
+++ unset CONDA_PROMPT_MODIFIER
+++ PS1=
+++ export CONDA_SHLVL=0
+++ CONDA_SHLVL=0
+++ export CONDA_EXE=/apps/generic/miniconda3/4.12.0/bin/conda
+++ CONDA_EXE=/apps/generic/miniconda3/4.12.0/bin/conda
+++ export _CE_M=
+++ _CE_M=
+++ export _CE_CONDA=
+++ _CE_CONDA=
+++ export CONDA_PYTHON_EXE=/apps/generic/miniconda3/4.12.0/bin/python
+++ CONDA_PYTHON_EXE=/apps/generic/miniconda3/4.12.0/bin/python
++ __conda_hashr
++ '[' -n '' ']'
++ '[' -n '' ']'
++ hash -r

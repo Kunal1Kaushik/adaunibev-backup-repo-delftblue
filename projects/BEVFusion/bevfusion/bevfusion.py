@@ -246,6 +246,16 @@ class BEVFusion(Base3DDetector):
         imgs = batch_inputs_dict.get('imgs', None)
         points = batch_inputs_dict.get('points', None)
         features = []
+
+        # --- Only apply dropout during training ---
+        drop_camera = drop_lidar = False
+        if self.training:
+            rand = torch.rand(1, device=points[0].device).item()  # safer than random.random()
+            if rand < 0.25:
+                drop_camera = True
+            elif rand < 0.5:
+                drop_lidar = True
+
         if imgs is not None:
             imgs = imgs.contiguous()
             lidar2image, camera_intrinsics, camera2lidar = [], [], []
@@ -268,8 +278,13 @@ class BEVFusion(Base3DDetector):
                                                 camera2lidar, img_aug_matrix,
                                                 lidar_aug_matrix,
                                                 batch_input_metas)
+            if drop_camera:
+                img_feature = torch.zeros_like(img_feature)
             features.append(img_feature)
+
         pts_feature = self.extract_pts_feat(batch_inputs_dict)
+        if drop_lidar:
+            pts_feature = torch.zeros_like(pts_feature)
         features.append(pts_feature)
 
         if self.fusion_layer is not None:

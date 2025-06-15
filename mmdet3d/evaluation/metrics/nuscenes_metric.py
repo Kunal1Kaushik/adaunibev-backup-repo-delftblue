@@ -93,7 +93,8 @@ class NuScenesMetric(BaseMetric):
                  modality: dict = dict(use_camera=False, use_lidar=True),
                  prefix: Optional[str] = None,
                  format_only: bool = False,
-                 jsonfile_prefix: Optional[str] = None,
+                 #jsonfile_prefix: Optional[str] = None,
+                 jsonfile_prefix: Optional[str] = './results',
                  eval_version: str = 'detection_cvpr_2019',
                  collect_device: str = 'cpu',
                  backend_args: Optional[dict] = None) -> None:
