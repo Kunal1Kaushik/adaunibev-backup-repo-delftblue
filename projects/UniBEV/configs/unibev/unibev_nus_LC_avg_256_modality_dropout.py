@@ -14,10 +14,12 @@ feature_norm = None
 modality_dropout_prob = 0.5
 
 dataset_type = 'NuScenesDataset'
-data_root = 'data/nuscenes/'
-sub_dir = 'mmdet3d_old_cor/'
-train_ann_file = sub_dir + 'mini_nuscenes_infos_train.pkl'
-val_ann_file = sub_dir + 'nuscenes_infos_val.pkl'
+data_root = 'data/nuscenes_unibev/'
+#sub_dir = 'mmdet3d_old_cor/'
+#train_ann_file = sub_dir + 'mini_nuscenes_infos_train.pkl'
+train_ann_file = 'nuscenes_infos_train.pkl'
+#val_ann_file = sub_dir + 'nuscenes_infos_val.pkl'
+val_ann_file = 'nuscenes_infos_val.pkl'
 work_dir = './outputs/train/unibev_avg_dim_256_nus_LC_full'
 
 load_from = 'remote_checkpoints/focos_3d_r101_centerpoint.pth'
