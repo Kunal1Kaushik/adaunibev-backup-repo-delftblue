@@ -1,0 +1,26 @@
+/usr/bin/bash: line 5: conda: command not found
+/usr/bin/bash: line 5: conda: command not found
++ CONFIG=projects/UniBEV/configs/unibev/unibev_nus_LC_avg_256_modality_dropout.py
++ WORK_DIR=./outputs/train/unibev_avg_dim_256_nus_LC_full
+++ pwd
+srun: error: gpu009: task 1: Exited with exit code 127
+srun: launch/slurm: _step_signal: Terminating StepId=7449450.0
++ echo 'Current Working Directory: /scratch/kkaushik/mmdetection3d'
++ CONFIG=projects/UniBEV/configs/unibev/unibev_nus_LC_avg_256_modality_dropout.py
++ WORK_DIR=./outputs/train/unibev_avg_dim_256_nus_LC_full
+++ dirname /usr/bin/bash
+++ pwd
++ PYTHONPATH=/usr/bin/..:
++ python -u tools/train_UniBEV.py projects/UniBEV/configs/unibev/unibev_nus_LC_avg_256_modality_dropout.py --launcher=slurm --work-dir=./outputs/train/unibev_avg_dim_256_nus_LC_full --cfg-options load_from=unibev_avgfusion_moddrop_trained/unibev_avgfusion_moddrop_trained.pth
++ echo 'Current Working Directory: /scratch/kkaushik/mmdetection3d'
+/usr/bin/bash: line 28: python: command not found
+++ dirname /usr/bin/bash
++ conda deactivate
++ PYTHONPATH=/usr/bin/..:
++ python -u tools/train_UniBEV.py projects/UniBEV/configs/unibev/unibev_nus_LC_avg_256_modality_dropout.py --launcher=slurm --work-dir=./outputs/train/unibev_avg_dim_256_nus_LC_full --cfg-options load_from=unibev_avgfusion_moddrop_trained/unibev_avgfusion_moddrop_trained.pth
+/usr/bin/bash: line 34: conda: command not found
+/usr/bin/bash: line 28: python: command not found
++ conda deactivate
+/usr/bin/bash: line 34: conda: command not found
+slurmstepd: error: *** STEP 7449450.0 ON gpu006 CANCELLED AT 2025-06-20T05:07:05 ***
+srun: error: gpu006: task 0: Exited with exit code 127

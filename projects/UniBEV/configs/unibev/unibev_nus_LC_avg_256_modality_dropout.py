@@ -6,12 +6,12 @@
 eval_interval = 1
 samples_per_gpu = 1
 workers_per_gpu = 2
-max_epochs = 36
-save_interval = 6
-log_interval = 10
+max_epochs = 9 #originally 36
+save_interval = 1 #originally 6
+log_interval = 9 #originally 10
 fusion_method = 'avg'
 feature_norm = None
-modality_dropout_prob = 0.5
+modality_dropout_prob = 0.0 #originally 0.5
 
 dataset_type = 'NuScenesDataset'
 data_root = 'data/nuscenes_unibev/'
@@ -68,12 +68,12 @@ runner = dict(type='EpochBasedRunner',
 
 train_pipeline = [
     dict(
-        type='LoadPointsFromFile',
+        type='LoadPointsFromFileCorruption',
         coord_type='LIDAR',
         load_dim=5,
         use_dim=5),
     dict(
-        type='LoadPointsFromMultiSweeps',
+        type='LoadPointsFromMultiSweepsCorruption',
         sweeps_num=10,
         use_dim=[0, 1, 2, 3, 4],
         file_client_args=file_client_args,
@@ -95,13 +95,13 @@ train_pipeline = [
 ]
 test_pipeline = [
     dict(
-        type='LoadPointsFromFile',
+        type='LoadPointsFromFileCorruption',
         coord_type='LIDAR',
         load_dim=5,
         use_dim=5,
     ),
     dict(
-        type='LoadPointsFromMultiSweeps',
+        type='LoadPointsFromMultiSweepsCorruption',
         sweeps_num=10,
         use_dim=[0, 1, 2, 3, 4],
         file_client_args=file_client_args,
@@ -152,7 +152,7 @@ data = dict(
             type=dataset_type,
             data_root=data_root,
             ann_file=data_root + train_ann_file,
-            load_interval=1,
+            load_interval=4,
             pipeline=train_pipeline,
             classes=class_names,
             modality=input_modality,
@@ -379,7 +379,7 @@ model = dict(
             pc_range=point_cloud_range))))
 
 evaluation = dict(interval=eval_interval, pipeline=test_pipeline)
-optimizer = dict(
+'''optimizer = dict(
     type='AdamW',
     lr=2e-4,
     paramwise_cfg=dict(
@@ -395,7 +395,26 @@ lr_config = dict(
     warmup='linear',
     warmup_iters=500,
     warmup_ratio=1.0 / 3,
-    min_lr_ratio=1e-3)
+    min_lr_ratio=1e-3)'''
+
+optimizer = dict(
+    type='AdamW',
+    lr=1e-4,
+    paramwise_cfg=dict(
+        custom_keys={
+            'img_backbone': dict(lr_mult=0.1),
+            'pts_backbone': dict(lr_mult=0.1),
+        }),
+    weight_decay=0.01)
+
+optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
+
+lr_config = dict(
+    policy='CosineAnnealing',
+    warmup='linear',
+    warmup_iters=200,
+    warmup_ratio=1.0 / 3,
+    min_lr_ratio=1e-2)
 
 # runtime settings
 total_epochs = max_epochs
@@ -413,7 +432,7 @@ dist_params = dict(backend='nccl')
 log_level = 'INFO'
 custom_hooks = [
     dict(type='CheckpointLateStageHook',
-         start=21,
+         start=1, #originally 21
          priority=60)
 ]
 workflow = [('train', 1), ('val', 1)]

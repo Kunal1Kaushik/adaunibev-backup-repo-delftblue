@@ -1,0 +1,13 @@
+/usr/bin/bash: line 5: conda: command not found
+/usr/bin/bash: line 5: /etc/profile.d/conda.sh: No such file or directory
+/usr/bin/bash: line 6: conda: command not found
++ CONFIG=projects/UniBEV/configs/unibev/unibev_nus_LC_avg_256_modality_dropout.py
++ WORK_DIR=./outputs/train/unibev_avg_dim_256_nus_LC_full
+++ pwd
++ echo 'Current Working Directory: /scratch/kkaushik/mmdetection3d'
+++ dirname /usr/bin/bash
++ PYTHONPATH=/usr/bin/..:
++ srun python -u tools/train_UniBEV.py projects/UniBEV/configs/unibev/unibev_nus_LC_avg_256_modality_dropout.py --launcher=slurm --work-dir=./outputs/train/unibev_avg_dim_256_nus_LC_full --cfg-options load_from=unibev_avgfusion_moddrop_trained/unibev_avgfusion_moddrop_trained.pth
+/usr/bin/bash: line 29: srun: command not found
++ conda deactivate
+/usr/bin/bash: line 35: conda: command not found

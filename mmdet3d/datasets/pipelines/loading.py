@@ -5,6 +5,7 @@ import numpy as np
 from mmdet3d.core.points import BasePoints, get_points_type
 from mmdet.datasets.builder import PIPELINES
 from mmdet.datasets.pipelines import LoadAnnotations, LoadImageFromFile
+import hashlib
 
 
 @PIPELINES.register_module()
@@ -235,6 +236,182 @@ class LoadPointsFromMultiSweeps(object):
 
 
 @PIPELINES.register_module()
+class LoadPointsFromMultiSweepsCorruption(object):
+    """Load points from multiple sweeps.
+
+    This is usually used for nuScenes dataset to utilize previous sweeps.
+
+    Args:
+        sweeps_num (int): Number of sweeps. Defaults to 10.
+        load_dim (int): Dimension number of the loaded points. Defaults to 5.
+        use_dim (list[int]): Which dimension to use. Defaults to [0, 1, 2, 4].
+        file_client_args (dict): Config dict of file clients, refer to
+            https://github.com/open-mmlab/mmcv/blob/master/mmcv/fileio/file_client.py
+            for more details. Defaults to dict(backend='disk').
+        pad_empty_sweeps (bool): Whether to repeat keyframe when
+            sweeps is empty. Defaults to False.
+        remove_close (bool): Whether to remove close points.
+            Defaults to False.
+        test_mode (bool): If test_model=True used for testing, it will not
+            randomly sample sweeps but select the nearest N frames.
+            Defaults to False.
+    """
+
+    def __init__(self,
+                 sweeps_num=10,
+                 load_dim=5,
+                 use_dim=[0, 1, 2, 4],
+                 file_client_args=dict(backend='disk'),
+                 pad_empty_sweeps=False,
+                 remove_close=False,
+                 test_mode=False):
+        self.load_dim = load_dim
+        self.sweeps_num = sweeps_num
+        self.use_dim = use_dim
+        self.file_client_args = file_client_args.copy()
+        self.file_client = None
+        self.pad_empty_sweeps = pad_empty_sweeps
+        self.remove_close = remove_close
+        self.test_mode = test_mode
+
+    def _load_points(self, pts_filename):
+        """Private function to load point clouds data.
+
+        Args:
+            pts_filename (str): Filename of point clouds data.
+
+        Returns:
+            np.ndarray: An array containing point clouds data.
+        """
+        if self.file_client is None:
+            self.file_client = mmcv.FileClient(**self.file_client_args)
+        try:
+            pts_bytes = self.file_client.get(pts_filename)
+            points = np.frombuffer(pts_bytes, dtype=np.float32)
+        except ConnectionError:
+            mmcv.check_file_exist(pts_filename)
+            if pts_filename.endswith('.npy'):
+                points = np.load(pts_filename)
+            else:
+                points = np.fromfile(pts_filename, dtype=np.float32)
+        return points
+
+    def _remove_close(self, points, radius=1.0):
+        """Removes point too close within a certain radius from origin.
+
+        Args:
+            points (np.ndarray | :obj:`BasePoints`): Sweep points.
+            radius (float): Radius below which points are removed.
+                Defaults to 1.0.
+
+        Returns:
+            np.ndarray: Points after removing.
+        """
+        if isinstance(points, np.ndarray):
+            points_numpy = points
+        elif isinstance(points, BasePoints):
+            points_numpy = points.tensor.numpy()
+        else:
+            raise NotImplementedError
+        x_filt = np.abs(points_numpy[:, 0]) < radius
+        y_filt = np.abs(points_numpy[:, 1]) < radius
+        not_close = np.logical_not(np.logical_and(x_filt, y_filt))
+        return points[not_close]
+
+    def apply_corruption(self, points, sample_idx, instances=None, car_class_id=0): #added myself
+        """Apply a random rectangular or angular FOV mask to remove points."""
+        if self.test_mode:
+            np.random.seed(int(hashlib.sha256(sample_idx.encode('utf-8')).hexdigest(), 16) % (2**32))
+        else:
+            np.random.seed(int(hashlib.sha256(sample_idx.encode('utf-8')).hexdigest(), 16) % (2**32))  # Ensure same corruption for sample and sweeps
+
+        #if np.random.rand() >= 0 and np.random.rand() < 0.8:
+            # Apply an angular field-of-view mask
+        theta_min, theta_max = np.random.uniform(-np.pi, np.pi, 2)
+        theta_min, theta_max = min(theta_min, theta_max), max(theta_min, theta_max)
+
+        if theta_max - theta_min < np.pi/4 :    
+            theta_min = 3*np.pi/8
+            theta_max = 5*np.pi/8
+        #if theta_max - theta_min > np.pi/4 :
+        angles = np.arctan2(points[:, 1], points[:, 0])
+        mask = ~((angles > theta_min) & (angles < theta_max))
+
+        points = points[mask]
+        
+        
+        '''else : 
+            
+            angles = np.arctan2(points[:, 1], points[:, 0])
+            mask = ~((angles > theta_min) & (angles < theta_max))
+            points = points[mask]'''
+        #else : 
+            #points = points
+
+        return points
+
+    def __call__(self, results):
+        """Call function to load multi-sweep point clouds from files.
+
+        Args:
+            results (dict): Result dict containing multi-sweep point cloud \
+                filenames.
+
+        Returns:
+            dict: The result dict containing the multi-sweep points data. \
+                Added key and value are described below.
+
+                - points (np.ndarray | :obj:`BasePoints`): Multi-sweep point \
+                    cloud arrays.
+        """
+        sample_idx = results['sample_idx'] # added 
+        #print("multisweeps")
+        #print(sample_idx)
+        points = results['points']
+        points.tensor[:, 4] = 0
+        sweep_points_list = [points]
+        ts = results['timestamp']
+        if self.pad_empty_sweeps and len(results['sweeps']) == 0:
+            for i in range(self.sweeps_num):
+                if self.remove_close:
+                    sweep_points_list.append(self._remove_close(points))
+                else:
+                    sweep_points_list.append(points)
+        else:
+            if len(results['sweeps']) <= self.sweeps_num:
+                choices = np.arange(len(results['sweeps']))
+            elif self.test_mode:
+                choices = np.arange(self.sweeps_num)
+            else:
+                choices = np.random.choice(
+                    len(results['sweeps']), self.sweeps_num, replace=False)
+            for idx in choices:
+                sweep = results['sweeps'][idx]
+                points_sweep = self._load_points(sweep['data_path'])
+                points_sweep = np.copy(points_sweep).reshape(-1, self.load_dim)
+                if self.remove_close:
+                    points_sweep = self._remove_close(points_sweep)
+                sweep_ts = sweep['timestamp'] / 1e6
+                points_sweep[:, :3] = points_sweep[:, :3] @ sweep[
+                    'sensor2lidar_rotation'].T
+                points_sweep[:, :3] += sweep['sensor2lidar_translation']
+                points_sweep[:, 4] = ts - sweep_ts
+                #points_sweep = self.apply_corruption(points_sweep, sample_idx, results['instances'], 0) # added myself
+                points_sweep = self.apply_corruption(points_sweep, sample_idx, 0) # added myself
+                points_sweep = points.new_point(points_sweep)
+                sweep_points_list.append(points_sweep)
+
+        points = points.cat(sweep_points_list)
+        points = points[:, self.use_dim]
+        results['points'] = points
+        return results
+
+    def __repr__(self):
+        """str: Return a string that describes the module."""
+        return f'{self.__class__.__name__}(sweeps_num={self.sweeps_num})'
+
+
+@PIPELINES.register_module()
 class PointSegClassMapping(object):
     """Map original semantic class to valid category ids.
 
@@ -415,6 +592,171 @@ class LoadPointsFromFile(object):
         points = points.reshape(-1, self.load_dim)
         points = points[:, self.use_dim]
         attribute_dims = None
+
+        if self.shift_height:
+            floor_height = np.percentile(points[:, 2], 0.99)
+            height = points[:, 2] - floor_height
+            points = np.concatenate(
+                [points[:, :3],
+                 np.expand_dims(height, 1), points[:, 3:]], 1)
+            attribute_dims = dict(height=3)
+
+        if self.use_color:
+            assert len(self.use_dim) >= 6
+            if attribute_dims is None:
+                attribute_dims = dict()
+            attribute_dims.update(
+                dict(color=[
+                    points.shape[1] - 3,
+                    points.shape[1] - 2,
+                    points.shape[1] - 1,
+                ]))
+
+        points_class = get_points_type(self.coord_type)
+        points = points_class(
+            points, points_dim=points.shape[-1], attribute_dims=attribute_dims)
+        results['points'] = points
+
+        return results
+
+    def __repr__(self):
+        """str: Return a string that describes the module."""
+        repr_str = self.__class__.__name__ + '('
+        repr_str += f'shift_height={self.shift_height}, '
+        repr_str += f'use_color={self.use_color}, '
+        repr_str += f'file_client_args={self.file_client_args}, '
+        repr_str += f'load_dim={self.load_dim}, '
+        repr_str += f'use_dim={self.use_dim})'
+        return repr_str
+
+
+@PIPELINES.register_module()
+class LoadPointsFromFileCorruption(object):
+    """Load Points From File.
+
+    Load sunrgbd and scannet points from file.
+
+    Args:
+        coord_type (str): The type of coordinates of points cloud.
+            Available options includes:
+            - 'LIDAR': Points in LiDAR coordinates.
+            - 'DEPTH': Points in depth coordinates, usually for indoor dataset.
+            - 'CAMERA': Points in camera coordinates.
+        load_dim (int): The dimension of the loaded points.
+            Defaults to 6.
+        use_dim (list[int]): Which dimensions of the points to be used.
+            Defaults to [0, 1, 2]. For KITTI dataset, set use_dim=4
+            or use_dim=[0, 1, 2, 3] to use the intensity dimension.
+        shift_height (bool): Whether to use shifted height. Defaults to False.
+        use_color (bool): Whether to use color features. Defaults to False.
+        file_client_args (dict): Config dict of file clients, refer to
+            https://github.com/open-mmlab/mmcv/blob/master/mmcv/fileio/file_client.py
+            for more details. Defaults to dict(backend='disk').
+    """
+
+    def __init__(self,
+                 coord_type,
+                 load_dim=6,
+                 use_dim=[0, 1, 2],
+                 shift_height=False,
+                 use_color=False,
+                 file_client_args=dict(backend='disk'),
+                 test_mode=False):
+        self.shift_height = shift_height
+        self.use_color = use_color
+        if isinstance(use_dim, int):
+            use_dim = list(range(use_dim))
+        assert max(use_dim) < load_dim, \
+            f'Expect all used dimensions < {load_dim}, got {use_dim}'
+        assert coord_type in ['CAMERA', 'LIDAR', 'DEPTH']
+
+        self.coord_type = coord_type
+        self.load_dim = load_dim
+        self.use_dim = use_dim
+        self.file_client_args = file_client_args.copy()
+        self.file_client = None
+        self.test_mode=test_mode
+
+    def _load_points(self, pts_filename):
+        """Private function to load point clouds data.
+
+        Args:
+            pts_filename (str): Filename of point clouds data.
+
+        Returns:
+            np.ndarray: An array containing point clouds data.
+        """
+        if self.file_client is None:
+            self.file_client = mmcv.FileClient(**self.file_client_args)
+        try:
+            pts_bytes = self.file_client.get(pts_filename)
+            points = np.frombuffer(pts_bytes, dtype=np.float32)
+        except ConnectionError:
+            mmcv.check_file_exist(pts_filename)
+            if pts_filename.endswith('.npy'):
+                points = np.load(pts_filename)
+            else:
+                points = np.fromfile(pts_filename, dtype=np.float32)
+
+        return points
+
+    def apply_corruption(self, results, points, sample_idx, instances=None, car_class_id=0): #added myself
+        """Apply a random rectangular or angular FOV mask to remove points."""
+        if self.test_mode:
+            np.random.seed(int(hashlib.sha256(sample_idx.encode('utf-8')).hexdigest(), 16) % (2**32))
+        else:
+            np.random.seed(int(hashlib.sha256(sample_idx.encode('utf-8')).hexdigest(), 16) % (2**32))  # Ensure same corruption for sample and sweeps
+
+        #if np.random.rand() >= 0 and np.random.rand() < 0.8:
+            # Apply an angular field-of-view mask
+        theta_min, theta_max = np.random.uniform(-np.pi, np.pi, 2)
+        theta_min, theta_max = min(theta_min, theta_max), max(theta_min, theta_max)
+
+        if theta_max - theta_min < np.pi/4 : 
+            theta_min = 3*np.pi/8
+            theta_max = 5*np.pi/8
+            
+        #if theta_max - theta_min > np.pi/8 :
+        angles = np.arctan2(points[:, 1], points[:, 0])
+        mask = ~((angles > theta_min) & (angles < theta_max))
+
+        points = points[mask]
+        
+        '''else : 
+            points = points
+            bev_size = (180, 180)
+            bev_mask = np.zeros(bev_size, dtype=np.float32)
+            corruption_annotation_map[sample_idx] = bev_mask'''
+
+        '''else : 
+            points = points
+            bev_size = (180, 180)
+            bev_mask = np.zeros(bev_size, dtype=np.float32)
+            corruption_annotation_map[sample_idx] = bev_mask'''
+
+        
+        return results, points
+
+    def __call__(self, results):
+        """Call function to load points data from file.
+
+        Args:
+            results (dict): Result dict containing point clouds data.
+
+        Returns:
+            dict: The result dict containing the point clouds data. \
+                Added key and value are described below.
+
+                - points (:obj:`BasePoints`): Point clouds data.
+        """
+        sample_idx = results['sample_idx'] #added myself
+        pts_filename = results['pts_filename']
+        points = self._load_points(pts_filename)
+        points = points.reshape(-1, self.load_dim)
+        points = points[:, self.use_dim]
+        attribute_dims = None
+        #points = self.apply_corruption(points, sample_idx, results['instances'], 0) # added myself
+        results, points = self.apply_corruption(results, points, sample_idx, 0) # added myself
 
         if self.shift_height:
             floor_height = np.percentile(points[:, 2], 0.99)
