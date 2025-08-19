@@ -212,6 +212,12 @@ def main():
         test_cfg=cfg.get('test_cfg'))
     model.init_weights()
 
+    # Freeze BatchNorm running stats
+    for m in model.modules():
+        if isinstance(m, torch.nn.modules.batchnorm._BatchNorm):
+            m.eval()
+            m.track_running_stats = False
+
     logger.info(f'Model:\n{model}')
     datasets = [build_dataset(cfg.data.train)]
     if len(cfg.workflow) == 2:

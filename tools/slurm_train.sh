@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-#SBATCH --job-name="train_unibev_corruption"
+#SBATCH --job-name="camera_corruption"
 #SBATCH --partition=gpu
-#SBATCH --time=48:00:00
+#SBATCH --time=32:00:00
 
 #SBATCH --ntasks=2
 #SBATCH --cpus-per-task=32
@@ -10,8 +10,8 @@
 #SBATCH --mem-per-cpu=2G
 #SBATCH --account=research-ME-cor
 #SBATCH --mail-type=END
-#SBATCH --output=outputs/slurm_logs/train_unibev_corruption_a40_db_multi_node_%j.out
-#SBATCH --error=outputs/slurm_logs/train_unibev_corruption_a40_db_multi_node_%j.err
+#SBATCH --output=outputs/slurm_logs/camera_corruption_a40_db_multi_node_%j.out
+#SBATCH --error=outputs/slurm_logs/camera_corruption_a40_db_multi_node_%j.err
 
 #module load 2024r1
 #module load openmpi
@@ -25,7 +25,15 @@ source ~/.bashrc
 #unset CONDA_SHLVL
 #source "$(conda info --base)/etc/profile.d/conda.sh"
 
-srun singularity exec --bind /projects:/projects --nv unibev_cuda.sif bash -c '
+# Disable hostname resolution (critical for Singularity + Slurm)
+export SLURM_JOB_NODELIST=$(scontrol show hostnames $SLURM_JOB_NODELIST | tr '\n' ' ')
+export MASTER_ADDR=$(hostname -s)
+export MASTER_PORT=29500
+
+srun singularity exec --nv \
+  --bind /projects:/projects \
+  unibev_cuda.sif \
+  bash -c '
     source ~/.bashrc_cuda113
 
     
@@ -43,8 +51,8 @@ srun singularity exec --bind /projects:/projects --nv unibev_cuda.sif bash -c '
 
     #PARTITION=$1
     #JOB_NAME=$2
-    CONFIG="projects/UniBEV/configs/unibev/unibev_nus_LC_avg_256_modality_dropout.py"
-    WORK_DIR="./outputs/train/unibev_avg_dim_256_nus_LC_full"
+    CONFIG="projects/UniBEV/configs/unibev/unibev_nus_LC_avg_256_modality_dropout_customtraining.py"
+    WORK_DIR="./outputs/camera_corruption_1weight/unibev_avg_dim_256_nus_LC_full"
     #GPUS=${GPUS:-8}
     #GPUS_PER_NODE=${GPUS_PER_NODE:-8}
     #CPUS_PER_TASK=${CPUS_PER_TASK:-5}

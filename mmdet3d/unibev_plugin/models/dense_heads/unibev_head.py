@@ -197,7 +197,7 @@ class UniBEV_Head(DETRHead):
             # prev_bev=prev_bev
         )
 
-        bev_embed, hs, init_reference, inter_references = outputs
+        bev_embed, hs, init_reference, inter_references, pts_bev_embed, img_bev_embed = outputs
         hs = hs.permute(0, 2, 1, 3)
         outputs_classes = []
         outputs_coords = []
@@ -237,6 +237,8 @@ class UniBEV_Head(DETRHead):
             'all_bbox_preds': outputs_coords,
             'enc_cls_scores': None,
             'enc_bbox_preds': None,
+            'pts_bev_embed' : pts_bev_embed,
+            'img_bev_embed' : img_bev_embed,
         }
 
         return outs

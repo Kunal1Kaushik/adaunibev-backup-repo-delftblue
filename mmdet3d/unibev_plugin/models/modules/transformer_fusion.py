@@ -277,12 +277,99 @@ class UniBEVTransformer(BaseModule):
 
         return pts_feat_flatten, pts_spatial_shapes, pts_level_start_index
 
-    def multi_modal_fusion(self, img_bev_embed, pts_bev_embed):
+    def multi_modal_fusion(self, img_bev_embed, pts_bev_embed, img_metas):
         assert self.fusion_method is not None
+        #print(pts_bev_embed.shape)
+        fused_bev_embed = torch.zeros_like(pts_bev_embed)   
+        #print("img_metas")
+        #print(img_metas[0]['corruption_annotation'])     
         if self.fusion_method == 'linear':
             fused_bev_embed = self.c_flag * img_bev_embed + self.l_flag * pts_bev_embed
         elif self.fusion_method == 'avg':
-            fused_bev_embed = img_bev_embed * self.c_flag / (self.c_flag + self.l_flag) + pts_bev_embed * self.l_flag / (self.c_flag + self.l_flag)
+            #fused_bev_embed = img_bev_embed * self.c_flag / (self.c_flag + self.l_flag) + pts_bev_embed * self.l_flag / (self.c_flag + self.l_flag)
+            #fused_bev_embed = img_bev_embed * 1.0 + pts_bev_embed * 0.0
+            #for i in range(pts_bev_embed.size(0)):
+                #fusion_weights = img_metas[i]['fusion_weights']  # (1, 200, 200)
+                #fusion_weights = fusion_weights.view(-1, 1)       # (40000, 1)
+
+                #img_feat = img_bev_embed[i]  # (40000, 256)
+                #pts_feat = pts_bev_embed[i]  # (40000, 256)
+
+                #fused = fusion_weights * img_feat + (1 - fusion_weights) * pts_feat  # (40000, 256)
+
+                #fused_bev_embed[i] = fused
+
+            # Assuming all fusion_weights are (1, H, W)
+            fusion_weights = torch.stack([meta['fusion_weights'] for meta in img_metas])  # (B, 1, H, W)
+            fusion_weights = fusion_weights.view(pts_bev_embed.size(0), -1, 1)  # (B, 40000, 1)
+
+            #fused_bev_embed = fusion_weights * img_bev_embed + (1 - fusion_weights) * pts_bev_embed  # (B, 40000, 256)
+            fused_bev_embed = fusion_weights * pts_bev_embed + (1 - fusion_weights) * img_bev_embed  # (B, 40000, 256)
+
+            
+            '''for i in range(pts_bev_embed.size(0)):
+                if 'no_points' in img_metas[i]:
+                    bev_mask = img_metas[i]['no_points']
+                else:
+                    bev_mask = None
+                if bev_mask is not None:
+                    bev_mask = bev_mask.flatten()
+
+                    # Convert numpy mask to torch tensor and move to correct device
+                    bev_mask_tensor = bev_mask.to(img_bev_embed.device).bool()  # shape: [40000]
+
+                    # Reshape for broadcasting over batch and channels
+                    bev_mask_tensor = bev_mask_tensor.view(1, -1, 1)  # shape: [1, 40000, 1]
+
+                    # Weights
+                    w1 = 1.0
+                    w2 = 0.0
+                    a = self.c_flag / (self.c_flag + self.l_flag)
+                    b = self.l_flag / (self.c_flag + self.l_flag)
+
+                    # Perform vectorized fusion
+                    fused_bev_embed[i] = torch.where(
+                        bev_mask_tensor,
+                        img_bev_embed[i] * w1 + pts_bev_embed[i] * w2,
+                        img_bev_embed[i] * a + pts_bev_embed[i] * b
+                    )
+                else:
+                    fused_bev_embed[i] = img_bev_embed[i] * self.c_flag / (self.c_flag + self.l_flag) + pts_bev_embed[i] * self.l_flag / (self.c_flag + self.l_flag)'''
+
+            '''for i in range(pts_bev_embed.size(0)):
+                if 'corruption_annotation' in img_metas[i]:
+                    bev_mask = img_metas[i]['corruption_annotation']
+                else:
+                    bev_mask = None
+                if bev_mask is not None:
+                    bev_mask = np.rot90(bev_mask, k=1, axes=(0, 1))  # rotate 90° CCW
+                    bev_mask = np.rot90(bev_mask, k=1, axes=(0, 1))  # rotate 90° CCW
+                    bev_mask = np.rot90(bev_mask, k=1, axes=(0, 1))  # rotate 90° CCW
+                    bev_mask = np.flip(bev_mask, axis=1)
+                    bev_mask = bev_mask.flatten()
+
+                    # Convert numpy mask to torch tensor and move to correct device
+                    bev_mask_tensor = torch.from_numpy(bev_mask).to(img_bev_embed.device).bool()  # shape: [40000]
+
+                    # Reshape for broadcasting over batch and channels
+                    bev_mask_tensor = bev_mask_tensor.view(1, -1, 1)  # shape: [1, 40000, 1]
+
+                    # Weights
+                    w1 = 0.55
+                    w2 = 0.45
+                    a = self.c_flag / (self.c_flag + self.l_flag)
+                    b = self.l_flag / (self.c_flag + self.l_flag)
+
+                    # Perform vectorized fusion
+                    fused_bev_embed[i] = torch.where(
+                        bev_mask_tensor,
+                        img_bev_embed[i] * w1 + pts_bev_embed[i] * w2,
+                        img_bev_embed[i] * a + pts_bev_embed[i] * b
+                    )
+                else:
+                    fused_bev_embed[i] = img_bev_embed[i] * self.c_flag / (self.c_flag + self.l_flag) + pts_bev_embed[i] * self.l_flag / (self.c_flag + self.l_flag)'''
+        
+
         elif self.fusion_method == 'cat':
             if self.feature_norm == 'ModalityProjection':
                 assert img_bev_embed.shape[-1] == self.embed_dims * 2 and pts_bev_embed.shape[-1] == self.embed_dims * 2
@@ -460,6 +547,7 @@ class UniBEVTransformer(BaseModule):
                     be returned when `as_two_stage` is True, \
                     otherwise None.
         """
+        #print(kwargs['img_metas'])
         self.l_flag = 1
         self.c_flag = 1
         if self.drop_modality is not None and self.training is True:
@@ -535,7 +623,7 @@ class UniBEVTransformer(BaseModule):
         img_bev_embed, pts_bev_embed, vis_data_channel = self.channel_feature_norm(img_bev_embed, pts_bev_embed)
         img_bev_embed, pts_bev_embed, vis_data_spatial = self.spatial_feature_norm(img_bev_embed, pts_bev_embed)
 
-        fused_bev_embed = self.multi_modal_fusion(img_bev_embed, pts_bev_embed)
+        fused_bev_embed = self.multi_modal_fusion(img_bev_embed, pts_bev_embed, kwargs['img_metas'])
 
         query_pos, query = torch.split(object_query_embed, self.embed_dims * self.scale_factor, dim=1)
         query_pos = query_pos.unsqueeze(0).expand(bs, -1, -1)
@@ -583,4 +671,4 @@ class UniBEVTransformer(BaseModule):
 
         inter_references_out = inter_references
 
-        return fused_bev_embed, inter_states, init_reference_out, inter_references_out
+        return fused_bev_embed, inter_states, init_reference_out, inter_references_out, pts_bev_embed, img_bev_embed

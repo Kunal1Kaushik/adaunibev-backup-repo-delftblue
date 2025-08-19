@@ -6,9 +6,9 @@
 eval_interval = 1
 samples_per_gpu = 1
 workers_per_gpu = 2
-max_epochs = 9 #originally 36
+max_epochs = 18 #originally 36
 save_interval = 1 #originally 6
-log_interval = 9 #originally 10
+log_interval = 18 #originally 10
 fusion_method = 'avg'
 feature_norm = None
 modality_dropout_prob = 0.0 #originally 0.5
@@ -412,9 +412,9 @@ optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 lr_config = dict(
     policy='CosineAnnealing',
     warmup='linear',
-    warmup_iters=200,
+    warmup_iters=250,
     warmup_ratio=1.0 / 3,
-    min_lr_ratio=1e-2)
+    min_lr_ratio=1e-3)
 
 # runtime settings
 total_epochs = max_epochs

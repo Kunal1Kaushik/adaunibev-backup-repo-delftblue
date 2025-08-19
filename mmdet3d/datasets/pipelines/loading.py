@@ -73,6 +73,57 @@ class LoadMultiViewImageFromFiles(object):
 
 
 @PIPELINES.register_module()
+class LoadMultiViewImageFromFilesWithRandomZeros(object):
+    def __init__(self, to_float32=False, color_type='unchanged'):
+        self.to_float32 = to_float32
+        self.color_type = color_type
+
+    def __call__(self, results):
+        filenames = results['img_filename']
+
+        # Load all camera images
+        img = np.stack(
+            [mmcv.imread(name, self.color_type) for name in filenames], axis=-1
+        )
+
+        if self.to_float32:
+            img = img.astype(np.float32)
+
+        num_cams = img.shape[-1]
+
+        # Get deterministic RNG from sample_idx
+        sample_idx = str(results['sample_idx'])
+        seed = int(hashlib.sha256(sample_idx.encode('utf-8')).hexdigest(), 16) % (2**32)
+        rng = np.random.RandomState(seed)
+
+        # Randomly pick between 1 and 5 camera indices deterministically
+        num_to_zero = rng.randint(1, 6)  # upper bound is exclusive
+        zero_indices = rng.choice(num_cams, size=num_to_zero, replace=False)
+        results['zero_cams'] = zero_indices
+
+        for idx in zero_indices:
+            img[..., idx] = 0  # Set selected camera image to all zeros
+
+        results['filename'] = filenames
+        results['img'] = [img[..., i] for i in range(img.shape[-1])]
+        results['img_shape'] = img.shape
+        results['ori_shape'] = img.shape
+        results['pad_shape'] = img.shape
+        results['scale_factor'] = 1.0
+
+        num_channels = 1 if len(img.shape) < 3 else img.shape[2]
+        results['img_norm_cfg'] = dict(
+            mean=np.zeros(num_channels, dtype=np.float32),
+            std=np.ones(num_channels, dtype=np.float32),
+            to_rgb=False
+        )
+
+        return results
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(to_float32={self.to_float32}, color_type='{self.color_type}')"
+
+@PIPELINES.register_module()
 class LoadImageFromFileMono3D(LoadImageFromFile):
     """Load an image from file in monocular 3D object detection. Compared to 2D
     detection, additional camera parameters need to be loaded.
@@ -320,33 +371,82 @@ class LoadPointsFromMultiSweepsCorruption(object):
 
     def apply_corruption(self, points, sample_idx, instances=None, car_class_id=0): #added myself
         """Apply a random rectangular or angular FOV mask to remove points."""
-        if self.test_mode:
-            np.random.seed(int(hashlib.sha256(sample_idx.encode('utf-8')).hexdigest(), 16) % (2**32))
-        else:
-            np.random.seed(int(hashlib.sha256(sample_idx.encode('utf-8')).hexdigest(), 16) % (2**32))  # Ensure same corruption for sample and sweeps
+        seed = int(hashlib.sha256(sample_idx.encode('utf-8')).hexdigest(), 16) % (2**32)
+        rng = np.random.RandomState(seed)
 
-        #if np.random.rand() >= 0 and np.random.rand() < 0.8:
-            # Apply an angular field-of-view mask
-        theta_min, theta_max = np.random.uniform(-np.pi, np.pi, 2)
-        theta_min, theta_max = min(theta_min, theta_max), max(theta_min, theta_max)
+        return points
 
-        if theta_max - theta_min < np.pi/4 :    
-            theta_min = 3*np.pi/8
-            theta_max = 5*np.pi/8
-        #if theta_max - theta_min > np.pi/4 :
-        angles = np.arctan2(points[:, 1], points[:, 0])
-        mask = ~((angles > theta_min) & (angles < theta_max))
+        if rng.random()>=0 and rng.random() < 0.5:
+            '''# Apply an angular field-of-view mask
+            theta_min, theta_max = np.random.uniform(-np.pi, np.pi, 2)
+            theta_min, theta_max = min(theta_min, theta_max), max(theta_min, theta_max)
 
-        points = points[mask]
-        
-        
-        '''else : 
-            
+            if theta_max - theta_min < np.pi/4 :    
+                theta_min = 3*np.pi/8
+                theta_max = 5*np.pi/8
+
             angles = np.arctan2(points[:, 1], points[:, 0])
             mask = ~((angles > theta_min) & (angles < theta_max))
+
             points = points[mask]'''
-        #else : 
-            #points = points
+
+            theta_min, theta_max = rng.uniform(-np.pi, np.pi, 2)
+
+            angles = np.arctan2(points[:, 1], points[:, 0])
+
+            if theta_min < theta_max:
+                if theta_max - theta_min < np.pi/4 :    
+                    theta_min = 3*np.pi/8
+                    theta_max = 5*np.pi/8
+                mask = ~((angles > theta_min) & (angles < theta_max))
+            else:
+                # Wrap-around case
+                if theta_min - theta_max > 7*np.pi/4 :    
+                    theta_min = 3*np.pi/8
+                    theta_max = 5*np.pi/8
+                    mask = ~((angles > theta_min) & (angles < theta_max))
+                else:
+                    mask = ~((angles > theta_min) | (angles < theta_max))
+
+            points = points[mask]
+
+        else:
+            #return points
+            num_vertical_beams = 32
+
+            # Step 1: Define the actual beam angles (top to bottom)
+            beam_angles_deg = np.linspace(10.67, -30.67, num_vertical_beams)
+            beam_angles_rad = np.radians(beam_angles_deg)
+
+            # Step 2: Compute elevation angles
+            xyz_norm = np.linalg.norm(points[:, :3], axis=1)
+            valid = xyz_norm > 1e-6
+            elevation = np.full(len(points), np.nan)
+            elevation[valid] = np.arcsin(np.clip(points[valid, 2] / xyz_norm[valid], -1.0, 1.0))
+
+            # Step 3: Assign each point to the closest beam
+            beam_indices = np.full(len(points), -1)
+            beam_indices[valid] = np.argmin(np.abs(elevation[valid, None] - beam_angles_rad[None, :]), axis=1)
+
+            # ✅ Step 4: Keep only desired beam indices
+            #keep_beam_ids = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
+            #keep_beam_ids = [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31]
+            #keep_beam_ids = [1, 10, 20, 30]
+            #keep_beam_ids = list(range(11))
+
+            # Randomly choose how many beams to keep (between 1 and 31)
+            num_beams_to_keep = rng.randint(1, num_vertical_beams)
+
+            # Randomly select `num_beams_to_keep` unique beam indices
+            keep_beam_ids = rng.choice(num_vertical_beams, size=num_beams_to_keep, replace=False)
+
+            # (Optional) sort the indices for consistency
+            keep_beam_ids = np.sort(keep_beam_ids)
+
+            mask = np.isin(beam_indices, keep_beam_ids) & valid
+
+            # Step 5: Apply the mask
+            points = points[mask]
 
         return points
 
@@ -702,38 +802,83 @@ class LoadPointsFromFileCorruption(object):
 
     def apply_corruption(self, results, points, sample_idx, instances=None, car_class_id=0): #added myself
         """Apply a random rectangular or angular FOV mask to remove points."""
-        if self.test_mode:
-            np.random.seed(int(hashlib.sha256(sample_idx.encode('utf-8')).hexdigest(), 16) % (2**32))
+        seed = int(hashlib.sha256(sample_idx.encode('utf-8')).hexdigest(), 16) % (2**32)
+        rng = np.random.RandomState(seed)
+
+        return results, points
+
+        if rng.random()>=0 and rng.random() < 0.5:
+            '''# Apply an angular field-of-view mask
+            theta_min, theta_max = np.random.uniform(-np.pi, np.pi, 2)
+            theta_min, theta_max = min(theta_min, theta_max), max(theta_min, theta_max)
+
+            if theta_max - theta_min < np.pi/4 : 
+                theta_min = 3*np.pi/8
+                theta_max = 5*np.pi/8
+                
+            #if theta_max - theta_min > np.pi/8 :
+            angles = np.arctan2(points[:, 1], points[:, 0])
+            mask = ~((angles > theta_min) & (angles < theta_max))
+
+            points = points[mask]'''
+
+            theta_min, theta_max = rng.uniform(-np.pi, np.pi, 2)
+
+            angles = np.arctan2(points[:, 1], points[:, 0])
+
+            if theta_min < theta_max:
+                if theta_max - theta_min < np.pi/4 :    
+                    theta_min = 3*np.pi/8
+                    theta_max = 5*np.pi/8
+                mask = ~((angles > theta_min) & (angles < theta_max))
+            else:
+                # Wrap-around case
+                if theta_min - theta_max > 7*np.pi/4 :    
+                    theta_min = 3*np.pi/8
+                    theta_max = 5*np.pi/8
+                    mask = ~((angles > theta_min) & (angles < theta_max))
+                else:
+                    mask = ~((angles > theta_min) | (angles < theta_max))
+
+            points = points[mask]
+
         else:
-            np.random.seed(int(hashlib.sha256(sample_idx.encode('utf-8')).hexdigest(), 16) % (2**32))  # Ensure same corruption for sample and sweeps
+            #return results, points
+            num_vertical_beams = 32
 
-        #if np.random.rand() >= 0 and np.random.rand() < 0.8:
-            # Apply an angular field-of-view mask
-        theta_min, theta_max = np.random.uniform(-np.pi, np.pi, 2)
-        theta_min, theta_max = min(theta_min, theta_max), max(theta_min, theta_max)
+            # Step 1: Define the actual beam angles (top to bottom)
+            beam_angles_deg = np.linspace(10.67, -30.67, num_vertical_beams)
+            beam_angles_rad = np.radians(beam_angles_deg)
 
-        if theta_max - theta_min < np.pi/4 : 
-            theta_min = 3*np.pi/8
-            theta_max = 5*np.pi/8
-            
-        #if theta_max - theta_min > np.pi/8 :
-        angles = np.arctan2(points[:, 1], points[:, 0])
-        mask = ~((angles > theta_min) & (angles < theta_max))
+            # Step 2: Compute elevation angles
+            xyz_norm = np.linalg.norm(points[:, :3], axis=1)
+            valid = xyz_norm > 1e-6
+            elevation = np.full(len(points), np.nan)
+            elevation[valid] = np.arcsin(np.clip(points[valid, 2] / xyz_norm[valid], -1.0, 1.0))
 
-        points = points[mask]
-        
-        '''else : 
-            points = points
-            bev_size = (180, 180)
-            bev_mask = np.zeros(bev_size, dtype=np.float32)
-            corruption_annotation_map[sample_idx] = bev_mask'''
+            # Step 3: Assign each point to the closest beam
+            beam_indices = np.full(len(points), -1)
+            beam_indices[valid] = np.argmin(np.abs(elevation[valid, None] - beam_angles_rad[None, :]), axis=1)
 
-        '''else : 
-            points = points
-            bev_size = (180, 180)
-            bev_mask = np.zeros(bev_size, dtype=np.float32)
-            corruption_annotation_map[sample_idx] = bev_mask'''
+            # ✅ Step 4: Keep only desired beam indices
+            #keep_beam_ids = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
+            #keep_beam_ids = [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31]
+            #keep_beam_ids = [1, 10, 20, 30]
+            #keep_beam_ids = list(range(11))
 
+            # Randomly choose how many beams to keep (between 1 and 31)
+            num_beams_to_keep = rng.randint(1, num_vertical_beams)
+
+            # Randomly select `num_beams_to_keep` unique beam indices
+            keep_beam_ids = rng.choice(num_vertical_beams, size=num_beams_to_keep, replace=False)
+
+            # (Optional) sort the indices for consistency
+            keep_beam_ids = np.sort(keep_beam_ids)
+
+            mask = np.isin(beam_indices, keep_beam_ids) & valid
+
+            # Step 5: Apply the mask
+            points = points[mask]
         
         return results, points
 
